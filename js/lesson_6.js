@@ -4,6 +4,9 @@ let selectCartClick = document.querySelector(".cart-icon")
 selectCartClick.addEventListener("click", openCart)
 let selectCartCount = document.querySelector(".count-product")
 let selectShop = document.querySelector(".shop")
+let selectUp = document.querySelector(".up-complite")
+let selectUpArr = document.querySelectorAll(".step")
+let ligic = 0
 let cart = [{
         id: 1234,
         titlte: "Свитер",
@@ -100,50 +103,161 @@ let product = [{
     }
 ]
 
-function cartGen() {
+function sumCart() {
+    summTemp = 0
     for (let l = 0; l < cart.length; l++) {
         element = cart[l]
-        price = document.createElement("span")
-        price.textContent = `Цена товара: ${element.price}`
-        summer = document.createElement("span")
-        summer.textContent = `Итого: ${element.price * element.count}`
-        sumPrice = document.createElement("div")
-        sumPrice.className = "car-price"
-        sumPrice.append(price)
-        sumPrice.append(summer)
-        count = document.createElement("span") //по хорошему тут надо input рядом -+ но времени нет!
-        count.textContent = "Кол-во: " + element.count
-        count.className = "car-count"
-        cartSum = document.createElement("div")
-        cartSum.className = "car-sumer"
-        cartSum.append(count)
-        cartSum.append(sumPrice)
-        character = document.createElement("div")
-        characterType = document.createElement('span')
-        characterType.textContent = "Тип: " + element.character.type
-        character.append(characterType)
-        characterSize = document.createElement('span')
-        characterSize.textContent = "Размер: " + element.character.size
-        character.append(characterSize)
-        character.className = "car-character"
-        description = document.createElement("span")
-        description.textContent = "Описание: " + element.description
-        description.className = "car-description"
-        imgElement = document.createElement('img')
-        imgElement.setAttribute("src", element.imgUrl)
-        titlteElement = document.createElement("span")
-        titlteElement.textContent = element.titlte
-        titlteElement.className = "car-title"
-        cartProduct = document.createElement("div")
-        cartProduct.append(titlteElement)
-        cartProduct.append(imgElement)
-        cartProduct.append(description)
-        cartProduct.append(character)
-        cartProduct.append(cartSum)
-        cartProduct.className = "cart-product"
-        cartProduct.dataset.id = element.id
-        selectCart.append(cartProduct)
+        summTemp = summTemp + (element.price * element.count)
+    }
+    if (cart.length != 0) {
+        numberSummCart.style.display = "block"
+        numberSummCart.textContent = `Общая сумма покупки составляет: ${summTemp}`
+    } else numberSummCart.style.display = "none"
+}
 
+function addCartCount() {
+    elementEvent = this
+    for (let l = 0; l < cart.length; l++) {
+        element = cart[l]
+        if (element.id == elementEvent.dataset.id) {
+            element.count = elementEvent.value
+        }
+    }
+}
+
+function buttonEditCountCart() {
+    buttonElement = this
+    if (buttonElement.classList == "action-minus") {
+        inpTarg = buttonElement.nextSibling
+        inpTarg.value = (inpTarg.value != 1) ? Number(inpTarg.value) - 1 : 1
+        for (let l = 0; l < cart.length; l++) {
+            element = cart[l]
+            if (element.id == inpTarg.dataset.id) {
+                element.count = inpTarg.value
+            }
+        }
+    } else {
+        inpTarg = buttonElement.previousElementSibling
+        inpTarg.value = Number(inpTarg.value) + 1
+        for (let l = 0; l < cart.length; l++) {
+            element = cart[l]
+            if (element.id == inpTarg.dataset.id) {
+                element.count = inpTarg.value
+            }
+        }
+    }
+    sumCart()
+}
+
+function removeCartItem(event) {
+    selectCartItems = document.querySelector(".cart-items")
+    if (event.target.className == "remove-item") {
+        selectCartItems.removeChild(this)
+        cart.splice(findId(cart, this.dataset.id), 1)
+        cartCount()
+        sumCart()
+    }
+    if (cart.length == 0) {
+        cartNoneGen()
+        summCartAll.style.display = "none"
+        itemsCart.style.display = "none"
+        cartCount()
+
+    }
+}
+
+function cartGen() {
+    if (cart.length != 0) {
+        summCartAll = document.createElement("div")
+        summCartAll.className = "cart-summ-all"
+        numberSummCart = document.createElement("span")
+        summCartAll.append(numberSummCart)
+        selectCart.append(summCartAll)
+        itemsCart = document.createElement("div")
+        itemsCart.className = "cart-items"
+        itemsCart.style.display = "flex"
+        selectUp.style.display = "flex"
+        selectCart.append(itemsCart)
+        for (let l = 0; l < cart.length; l++) {
+            element = cart[l]
+            price = document.createElement("span")
+            price.textContent = `Цена товара: ${element.price}`
+            summer = document.createElement("span")
+            summer.textContent = `Итого: ${element.price * element.count}`
+            sumPrice = document.createElement("div")
+            sumPrice.className = "car-price"
+            sumPrice.append(price)
+            sumPrice.append(summer)
+            countBlock = document.createElement("div")
+            countBlock.className = "count-container"
+            count = document.createElement("span")
+            count.textContent = "Кол-во: "
+            count.className = "car-count"
+            countBlock.append(count)
+            actionMinus = document.createElement("div")
+            actionMinus.className = "action-minus"
+            actionMinus.addEventListener("click", buttonEditCountCart)
+            countBlock.append(actionMinus)
+            inputCount = document.createElement("input")
+            inputCount.dataset.id = element.id
+            inputCount.addEventListener("change", addCartCount)
+            inputCount.addEventListener("change", sumCart)
+            inputCount.className = "input-count"
+            inputCount.setAttribute("type", "number")
+            inputCount.setAttribute("min", 1)
+            inputCount.setAttribute("value", element.count)
+            countBlock.append(inputCount)
+            actionPlus = document.createElement("div")
+            actionPlus.className = "action-pluse"
+            actionPlus.addEventListener("click", buttonEditCountCart)
+            countBlock.append(actionPlus)
+            cartSum = document.createElement("div")
+            cartSum.className = "car-sumer"
+            cartSum.append(sumPrice)
+            character = document.createElement("div")
+            characterType = document.createElement('span')
+            characterType.textContent = "Тип: " + element.character.type
+            character.append(characterType)
+            characterSize = document.createElement('span')
+            characterSize.textContent = "Размер: " + element.character.size
+            character.append(characterSize)
+            character.className = "car-character"
+            description = document.createElement("span")
+            description.textContent = "Описание: " + element.description
+            description.className = "car-description"
+            imgElement = document.createElement('img')
+            imgElement.setAttribute("src", element.imgUrl)
+            titlteElement = document.createElement("span")
+            titlteElement.textContent = element.titlte
+            titlteElement.className = "car-title"
+            cartProduct = document.createElement("div")
+            aboutBlock = document.createElement("div")
+            aboutBlock.className = "about-product"
+            removeProduct = document.createElement("div")
+            removeProduct.className = "remove-item"
+            removeProduct.dataset.id = element.id
+            cartProduct.append(removeProduct)
+            cartProduct.append(imgElement)
+            cartProduct.append(aboutBlock)
+            aboutBlock.append(titlteElement)
+            aboutBlock.append(description)
+            aboutBlock.append(character)
+            aboutBlock.append(cartSum)
+            aboutBlock.append(countBlock)
+            cartProduct.className = "cart-product"
+            cartProduct.dataset.id = element.id
+            cartProduct.addEventListener("click", removeCartItem)
+            itemsCart.append(cartProduct)
+        }
+        nextStepB = document.createElement("button")
+        nextStepB.className = "next-b"
+        nextStepB.textContent = "Далее"
+        nextStepB.dataset.step = 1
+        nextStepB.addEventListener("click", nextStep)
+        selectCart.append(nextStepB)
+        sumCart()
+    } else {
+        cartNoneGen()
     }
 }
 
@@ -173,15 +287,18 @@ function shopGen() {
         titlteElement = document.createElement("span")
         titlteElement.textContent = element.titlte
         titlteElement.className = "car-title"
-        cartProduct = document.createElement("div")
-        cartProduct.append(titlteElement)
-        cartProduct.append(imgElement)
-        cartProduct.append(description)
-        cartProduct.append(character)
-        cartProduct.append(price)
-        cartProduct.append(addCart)
-        cartProduct.className = "cart-product"
-        selectShop.append(cartProduct)
+        shopProduct = document.createElement("div")
+        aboutBlock = document.createElement("div")
+        aboutBlock.className = "about-product"
+        shopProduct.append(imgElement)
+        shopProduct.append(aboutBlock)
+        aboutBlock.append(titlteElement)
+        aboutBlock.append(description)
+        aboutBlock.append(character)
+        aboutBlock.append(price)
+        aboutBlock.append(addCart)
+        shopProduct.className = "shop-product"
+        selectShop.append(shopProduct)
 
     }
 }
@@ -218,6 +335,7 @@ function openCart() {
             selectShop.style.display = "none"
         } else {
             logicGen = true
+            selectUp.style.display = "none"
             selectShop.style.display = "flex"
         }
     })
@@ -226,6 +344,30 @@ function openCart() {
     } else cartGen()
 }
 
+function cartNoneGen() {
+    cartNoneElement = document.createElement("div")
+    textNoneCart = document.createElement("h3")
+    textNoneCart.textContent = "Корзина пуста"
+    cartNoneElement.append(textNoneCart)
+    selectCart.append(cartNoneElement)
+    cartNoneElement.className = "cart-none"
+}
+
+function nextStep() {
+    itemsCart.style.display = "none"
+    summCartAll.style.display = "none"
+    for (let h = 1; h < selectUpArr.length; h++) {
+        if (h == this.dataset.step) {
+            selectUpArr[h - 1].className = "step step-active"
+            selectCart.children[h - 1].style.display = "block"
+            if (h - 1 != 0) {
+                selectCart.children[h - 2].style.display = "none"
+            }
+        }
+    }
+    this.dataset.step++
+
+}
 
 window.onload = cartCount()
 window.onload = shopGen()
