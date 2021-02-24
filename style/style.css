@@ -1,3 +1,8 @@
+body {
+    padding: 0;
+    margin: 0;
+}
+
 .control {
     width: 500px;
     margin: 0 auto;
@@ -53,7 +58,13 @@
 
 .header-site {
     justify-content: flex-end;
-    margin: 10px 40px 10px;
+    display: flex;
+    position: fixed;
+    background-color: #2196f3;
+    z-index: 10;
+}
+
+.wrapper {
     display: flex;
 }
 
@@ -69,24 +80,126 @@ td {
     text-align: center;
 }
 
-.cart {
+.cart,
+.up-complite {
     display: none;
-    width: 80%;
-    margin: 0 auto;
+}
+
+.up-complite {
+    flex-direction: column;
+    padding-top: 218px;
+    width: 20%;
+    text-align: center;
+    position: fixed;
+}
+
+.step {
+    border: 1px solid #333;
+    border-radius: 5px;
+    margin: 20px auto;
+    width: 250px;
+    position: relative;
+}
+
+.step-active {
+    border: 3px solid #2196f3;
+}
+
+.step-active::after {
+    content: "";
+    position: absolute;
+    height: 40px;
+    width: 3px;
+    background-color: #2196f3;
+    left: 125px;
+    top: 20px;
+}
+
+.step-active+.step::before {
+    content: "";
+    width: 7px;
+    height: 7px;
+    position: absolute;
+    left: 123px;
+    top: -4px;
+    background-color: #2196f3;
+    border-radius: 50%;
+}
+
+.step-active:last-child+.step::before {
+    content: none;
+}
+
+.step-active:last-child:after {
+    content: none;
+}
+
+
+.cart-items {
+    display: flex;
+    width: 90%;
     background-color: rgb(165, 165, 165);
     justify-content: space-evenly;
     flex-wrap: wrap;
+    padding-top: 40px;
+}
+
+.cart-summ-all {
+    margin: 0 auto;
+    padding: 170px 0 30px;
+}
+
+.cart-summ-all>span {
+    display: block;
+    text-align: center;
+}
+
+.shop {
+    display: flex;
+    width: 80%;
+    margin: 0px auto;
+    padding-top: 180px;
+    background-color: rgb(122, 116, 116);
+    flex-wrap: wrap;
+}
+
+.shop-product {
+    border: 1px solid black;
+    display: flex;
+    margin: 5px;
+    padding: 5px;
+    height: 300px;
+    width: 100%;
+    position: relative;
 }
 
 .cart-product {
+    border: 1px solid black;
+    display: flex;
+    margin: 5px;
+    padding: 5px;
+    height: 300px;
+    min-width: 100vh;
+    position: relative;
+}
+
+.cart-none {
+    text-align: center;
+    padding-top: 180px;
+}
+
+.about-product {
+    width: 100%;
     display: flex;
     flex-direction: column;
-    width: 230px;
+    padding: 0 10px;
 }
 
 .car-title {
     text-align: center;
     padding: 10px;
+    font-weight: 600;
+    font-size: 32px;
 }
 
 .car-description {
@@ -104,4 +217,141 @@ td {
 
 .car-count {
     padding: 10px 0;
+}
+
+.cart {
+    margin-left: 20%;
+}
+
+.cart-open {
+    display: block;
+
+}
+
+header {
+    display: flex;
+    justify-content: flex-end;
+    padding: 50px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.cart-icon {
+    position: relative;
+    width: 50px;
+    height: 50px;
+    cursor: pointer;
+}
+
+#capa_1 {
+    position: absolute;
+}
+
+.count-product {
+    display: none;
+    position: absolute;
+    left: 21px;
+    top: -2px;
+    width: 20px;
+    height: 20px;
+    background-color: rgb(199, 0, 0);
+    border-radius: 50%;
+    text-align: center;
+    font-size: 17px;
+    user-select: none;
+}
+
+.car-sumer {
+    display: flex;
+    justify-content: space-between;
+
+}
+
+.car-price {
+    display: flex;
+    flex-direction: column;
+}
+
+.add-cart {
+    border: 1px solid #2196f3;
+    width: fit-content;
+    padding: 5px 10px;
+    background-color: #03a9f4;
+    border-radius: 14px;
+    cursor: pointer;
+    margin: 10px auto;
+}
+
+.add-cart:hover {
+    background-color: #048fcf;
+}
+
+.add-cart:active {
+    background-color: #005f8b;
+}
+
+.count-container {
+    display: flex;
+    justify-content: center;
+}
+
+.action-minus {
+    background-image: url('../img/negative.png');
+    background-size: 15px;
+    width: 15px;
+    height: 15px;
+    margin: auto 10px;
+    transition: 0.3s ease-in transform;
+    cursor: pointer;
+}
+
+.input-count {
+    width: 15px;
+    height: 15px;
+    margin: auto 0;
+}
+
+.input-count::-webkit-outer-spin-button,
+.input-count::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+}
+
+.action-pluse {
+    background-image: url('../img/plus.png');
+    background-size: 15px;
+    width: 15px;
+    height: 15px;
+    margin: auto 10px;
+    transition: 0.3s ease-in transform;
+    cursor: pointer;
+}
+
+.action-minus:hover,
+.action-pluse:hover {
+    transform: scale(1.5);
+}
+
+.remove-item {
+    background-image: url('../img/remove.png');
+    width: 24px;
+    height: 24px;
+    position: absolute;
+    left: 98%;
+    cursor: pointer;
+}
+
+.next-b {
+    border-radius: 5px;
+    background-color: #2196f3;
+    width: 130px;
+    padding: 5px;
+    margin: 10px;
+    cursor: pointer;
+}
+
+.adress,
+.buy,
+.complite {
+    display: none;
+    padding-top: 170px;
 }
